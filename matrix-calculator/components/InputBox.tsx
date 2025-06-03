@@ -1,14 +1,27 @@
+import { SetStateAction } from "react";
 
 type InputProps = {
-    index: number,
-    defaultValue: number,
-    setFunction: ()=>void,
+    matrix: number[][],
+    matrixName: string,
+    setFunction: (value: SetStateAction<number[][]>) => void,
 }
-export default function InputBox() {
+export default function InputBox({matrix, matrixName, setFunction}: InputProps) {
 
     return (
-        <div>
-
-        </div>
+    <div>
+        {matrix && matrix.map((row, rowIndex)=>(
+          <div key={`${matrixName}-${rowIndex}`} className="flex gap-2">
+            {row.map((cell, cellIndex)=>(
+              <input key={`${matrixName}-${cellIndex}`} type={"number"} defaultValue={cell} onChange={(e)=>{
+                let temp=matrix;
+                temp[rowIndex][cellIndex]=e.target.valueAsNumber;
+                setFunction(temp);
+              }}
+              className="shadow-inner w-[30px]"
+              />
+            ))}
+          </div>
+        ))}
+      </div>
     )
 }
