@@ -1,4 +1,5 @@
 import InputBox from "@/components/InputBox";
+import { AddColumn, AddRow, RemoveColumn, RemoveRow } from "@/utils/matrix-operations";
 import { useState } from "react"
 
 export default function Home() {
@@ -12,6 +13,7 @@ export default function Home() {
 
   async function multiplyMatrices() {
     'use server'
+    if (ACols != BRows) {return;}
     let c : number[][] = Array(ARows).fill(null).map(() => Array(BCols).fill(0));
     for (let i = 0; i < ARows; i++) {
       for (let j = 0; j < BCols; j++) {
@@ -25,123 +27,77 @@ export default function Home() {
     setOutput(c);
   }
 
-  function AddRowToA() { // Adds a row of 0's to A and updates row count
-    let temp=A;
-    temp.push(new Array(ACols).fill(0));
-    setA(temp);
-    setARows(ARows+1);
-  }
-
-  function RemoveRowFromA() { // Removes a row from A
-    if (ARows == 1) { // Cannot have less than 1 row in a matrix
-      return;
-    }
-    let temp = A;
-    temp.pop();
-    setARows(ARows - 1);
-    setA(temp);
-  }
-  
-  function AddColToA() { // Adds a column to A and a Row to B to match
-    let temp=A;
-    for (let i = 0; i < ARows; i++) {
-      temp[i].push(0);
-    }
-    setA(temp);
-    setACols(ACols+1);
-  }
-  
-  function RemoveColFromA() {
-    if (ACols == 1) { // Cannot have less than 1 column
-      return
-    }
-    let temp = A;
-    for (let i = 0; i < ARows; i++) {
-      temp[i].pop();
-    }
-    setACols(ACols-1);
-    setA(temp);
-  }
-
-  function AddRowToB() {
-    let temp=B;
-    temp.push(new Array(BCols).fill(0));
-    setB(temp);
-    setBRows(BRows+1);
-    if (BRows+1 != ACols) {AddColToA();}
-  }
-
-  function RemoveRowFromB() { // Removes a row from B, and a column from A
-    if (BRows == 1) { // Cannot have less than 1 row in a matrix
-      return;
-    }
-    let temp = B;
-    temp.pop();
-    setBRows(BRows - 1);
-    setB(temp);
-    if (BRows-1 != ACols) {RemoveColFromA();}
-  }
-
-  function AddColToB() {// Adds a column to B
-    let temp=B;
-    for (let i = 0; i < BRows; i++) {
-      temp[i].push(0);
-    }
-    setB(temp);
-    setBCols(BCols+1);
-  }
-
-  function RemoveColFromB() {
-    if (BCols == 1) { // Cannot have less than 1 column
-      return
-    }
-    let temp = B;
-    for (let i = 0; i < BRows; i++) {
-      temp[i].pop();
-    }
-    setBCols(BCols-1);
-    setB(temp);
-  }
-
   return (
     <div>
       <div className="flex">
-        <button onClick={()=> {AddRowToA();}}>
+        <button onClick={()=> {
+          setA(AddRow(A));
+          setARows(ARows+1);
+          }}>
           <div className="bg-green-500 p-3 rounded-xl">
             Add Row to A
           </div>
         </button>
-        <button onClick={()=> {RemoveRowFromA();}}>
+        <button onClick={()=> {
+          if (ARows > 1) {
+            setA(RemoveRow(A));
+            setARows(ARows-1);
+          }
+        }}>
           <div className="bg-red-500 p-3 rounded-xl">
             Remove Row From A
           </div>
         </button>
-        <button onClick={()=> {AddRowToB();}}>
+        <button onClick={()=> {
+          setA(AddColumn(A));
+          setACols(ACols+1);
+        }}>
           <div className="bg-green-500 p-3 rounded-xl">
             Add Column to A
           </div>
         </button>
-        <button onClick={()=> {RemoveRowFromB();}}>
+        <button onClick={()=> {
+          if (ACols > 1) {
+            setA(RemoveColumn(A));
+            setACols(ACols-1);
+          }
+        }}>
           <div className="bg-red-500 p-3 rounded-xl">
             Remove Column from A
           </div>
         </button>
-        <button onClick={()=> {AddRowToB();}}>
+        <button onClick={()=> {
+          setB(AddRow(B));
+          setBRows(BRows+1)
+        }}>
           <div className="bg-green-500 p-3 rounded-xl">
             Add Row to B
           </div>
         </button>
-        <button onClick={()=> {RemoveRowFromB();}}>
+        <button onClick={()=> {
+          if (BRows > 1) {
+            setB(RemoveRow(B));
+            setBRows(BRows-1);
+          }
+        }}>
           <div className="bg-red-500 p-3 rounded-xl">
             Remove Row from B
           </div>
         </button>
-        <button onClick={()=> {AddColToB();}}>
+        <button onClick={()=> {
+          setB(AddColumn(B));
+          setBCols(BCols+1);
+        }}>
           <div className="bg-green-500 p-3 rounded-xl">
             Add Column to B
           </div>
         </button>
-        <button onClick={()=> {RemoveColFromB();}}>
+        <button onClick={()=> {
+          if (BCols > 1) {
+            setB(RemoveColumn(B));
+            setBCols(BCols-1);
+          }
+        }}>
           <div className="bg-red-500 p-3 rounded-xl">
             Remove Column from B
           </div>
@@ -149,8 +105,8 @@ export default function Home() {
 
       </div>
       <div className="flex w-fill px-16 place-content-between">
-        <InputBox matrix={A} matrixName={"A"} setFunction={setA}/>
-        <InputBox matrix={B} matrixName={"B"} setFunction={setB}/>
+        <InputBox matrix={A} matrixName={"A"} setMatrixFunction={setA}/>
+        <InputBox matrix={B} matrixName={"B"} setMatrixFunction={setB}/>
       </div>
 
       <button onClick={()=> {
