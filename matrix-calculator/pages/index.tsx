@@ -1,35 +1,37 @@
 import InputBox from "@/components/InputBox";
-import { AddColumn, AddRow, GetMatrixRows, MultiplyMatrices, RemoveColumn, RemoveRow } from "@/utils/matrix-operations";
+import OutputBox from "@/components/OutputBox";
+import { GetMatrixColumns, GetMatrixRows, Matrix, MultiplyMatrices } from "@/utils/elementary-operations";
 import { useState } from "react"
 
 export default function Home() {
-  const [A, setA] = useState<number[][]>([[0, 0], [0, 0]]);
-  const [B, setB] = useState<number[][]>([[0, 0], [0, 0]]);
-  const [output, setOutput] = useState<number[][]>([[0, 0], [0, 0]]);
+  const [A, setA] = useState<Matrix>([[0, 0], [0, 0]]);
+  const [B, setB] = useState<Matrix>([[0, 0], [0, 0]]);
+  const [output, setOutput] = useState<Matrix>([[0, 0], [0, 0]]);
+  const [multPossible, setMultPossible] = useState<boolean>(true);
 
   return (
-    <div>
-      <div className="flex w-fill px-16 place-content-between">
+    <div className="mt-2 flex-col">
+      <div className="flex px-16 min-w-screen justify-stretch min-h-[128px] max-h-[144px] items-stretch">
         <InputBox matrix={A} matrixName={"A"} setMatrixFunction={setA}/>
         <InputBox matrix={B} matrixName={"B"} setMatrixFunction={setB}/>
       </div>
 
-      <button onClick={()=> {
-        setOutput(MultiplyMatrices(A, B));
-        console.log(output);
-      }}>
-        <div className="bg-orange-500 p-3 rounded-xl">
-          Set
-        </div>
-      </button>
-      <div id={"output"}>
-        {output && output.map((row, rowIndex)=>(
-          <div key={"Output-" + rowIndex} className="flex">
-            {row.map((cell, cellIndex)=>(
-              <div key={"Output-" + cellIndex} className="p-3">{cell}</div>
-            ))}
+      <div className="justify-items-center">
+        <button onClick={()=> {
+          if (GetMatrixColumns(A) == GetMatrixRows(B)) {
+            setOutput(MultiplyMatrices(A, B));
+            setMultPossible(true);
+          }
+          else {
+            setMultPossible(false);
+          }
+        }}>
+          <div className="bg-orange-500 p-3 rounded-xl">
+            Set
           </div>
-        ))}
+        </button>
+        {!multPossible && <p className="text-red-500">The number of columns in A must match the number of rows in B!</p>}
+        <OutputBox rows={GetMatrixRows(output)} columns={GetMatrixColumns(output)} output={output} />
       </div>
     </div>
   )
