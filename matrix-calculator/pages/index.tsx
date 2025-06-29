@@ -11,11 +11,16 @@ export default function Home() {
 
   return (
     <div className="mt-2 flex-col">
-      <div className="flex px-16 min-w-screen justify-stretch min-h-[128px] max-h-[144px] items-stretch">
+      <div className="flex px-16 min-w-screen">
         <InputBox matrix={A} matrixName={"A"} setMatrixFunction={setA}/>
+        <button className="self-start" onClick={()=>{
+          setA(B);
+          setB(A);
+        }}>
+          <div className="bg-gradient-to-tl bg-gray-300 rounded-xl p-3">Swap</div>
+        </button>
         <InputBox matrix={B} matrixName={"B"} setMatrixFunction={setB}/>
       </div>
-
       <div className="justify-items-center">
         <button onClick={()=> {
           if (GetMatrixColumns(A) == GetMatrixRows(B)) {
@@ -31,7 +36,7 @@ export default function Home() {
           </div>
         </button>
         {!multPossible && <p className="text-red-500">The number of columns in A must match the number of rows in B!</p>}
-        <OutputBox rows={GetMatrixRows(output)} columns={GetMatrixColumns(output)} output={output} />
+        <OutputBox rows={GetMatrixRows(output)} columns={GetMatrixColumns(output)} output={output} matrixName="output"/>
       </div>
     </div>
   )
