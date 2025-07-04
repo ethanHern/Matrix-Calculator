@@ -1,7 +1,7 @@
 import InputBox from "@/components/InputBox";
 import OutputBox from "@/components/OutputBox";
 import { GaussianElimination } from "@/utils/advanced-operations";
-import { CreateIdentity, GetMatrixColumns, GetMatrixRows, Matrix } from "@/utils/elementary-operations";
+import { GetMatrixColumns, GetMatrixRows, Matrix } from "@/utils/elementary-operations";
 import { useState } from "react";
 
 export default function Elimination() {
@@ -19,7 +19,7 @@ export default function Elimination() {
           {/*The container for the output*/}
           <div className="justify-items-center">
             <button onClick={()=> {
-              setOutput(CreateIdentity(5));
+              setOutput(GaussianElimination(A));
             }}>
               <div className="bg-orange-500 p-3 rounded-xl">
                 Eliminate
