@@ -1,12 +1,13 @@
 import InputBox from "@/components/InputBox";
 import OutputBox from "@/components/OutputBox";
-import { GaussianElimination } from "@/utils/advanced-operations";
+import { GaussianElimination, GaussJordanElimination } from "@/utils/advanced-operations";
 import { GetMatrixColumns, GetMatrixRows, Matrix } from "@/utils/elementary-operations";
 import { useState } from "react";
 
 export default function Elimination() {
   const [A, setA] = useState<Matrix>([[0, 0], [0, 0]]);
   const [output, setOutput] = useState<Matrix>([[0, 0], [0, 0]]);
+  const [failed, setFailed] = useState<boolean>(false);
 
     return (
         <div className="mt-2 flex-col">
@@ -17,14 +18,22 @@ export default function Elimination() {
           <InputBox matrix={A} matrixName="A" setMatrixFunction={setA} />
 
           {/*The container for the output*/}
-          <div className="justify-items-center">
+          <div className="flex flex-col items-center">
             <button onClick={()=> {
-              setOutput(GaussianElimination(A));
+              let data = GaussJordanElimination(A);
+              setFailed(data.failed);
+              if (data.result) {setOutput(data.result);}
             }}>
               <div className="bg-orange-500 p-3 rounded-xl">
                 Eliminate
               </div>
             </button>
+            {failed &&
+            <div className="text-center justify-self-center">
+              <p>Elimination Failed! (Zero pivot encountered)</p>
+              <p>Below is the last step before failure</p>
+            </div>
+            }
             <OutputBox rows={GetMatrixRows(output)} columns={GetMatrixColumns(output)} output={output} matrixName="output"/>
           </div>
         </div>

@@ -30,7 +30,7 @@ export default function Multiplication() {
       </div>
 
       {/*The container for the output*/}
-      <div className="justify-items-center">
+      <div className="flex flex-col items-center">
         {/*The Set button*/}
         <button onClick={()=> {
           if (GetMatrixColumns(A) == GetMatrixRows(B)) {
