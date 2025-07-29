@@ -11,14 +11,18 @@ export default function InputBox({matrix, matrixName, setMatrixFunction}: InputP
 
     return (
     <div className="p-2 gap-y-1.5 flex-1">
+      {/* Matrix title */}
       <p className="text-4xl font-extrabold font-serif text-center">{matrixName}</p>
+
+      {/* Buttons to set rows and columns */}
       <div id={`Buttons-${matrixName}`} className="flex gap-2 justify-center">
+        {/* Row Buttons */}
         <div id={`Rows-${matrixName}`} className="flex gap-1">
           <p>Rows:</p>
           <button onClick={()=> {
             setMatrixFunction(RemoveRow(matrix));
           }}>
-            <div className="bg-red-500 px-4 rounded-xl">
+            <div className="bg-red-500 px-4 rounded-xl font-bold hover:cursor-pointer hover:inset-shadow-md hover:bg-red-600 active:bg-red-700">
               -
             </div>
           </button>
@@ -26,17 +30,18 @@ export default function InputBox({matrix, matrixName, setMatrixFunction}: InputP
           <button onClick={()=> {
             setMatrixFunction(AddRow(matrix));
             }}>
-            <div className="bg-green-500 px-4 rounded-xl">
+            <div className="bg-green-500 px-4 rounded-xl font-bold hover:cursor-pointer hover:inset-shadow-md hover:bg-green-600 active:bg-green-700">
               +
             </div>
           </button>
         </div>
+        {/* Column Buttons */}
         <div id={`Columns-${matrixName}`} className="flex gap-1">
           <p>Columns:</p>
           <button onClick={()=> {
             setMatrixFunction(RemoveColumn(matrix));
           }}>
-            <div className="bg-red-500 px-4 rounded-xl">
+            <div className="bg-red-500 px-4 rounded-xl font-bold hover:cursor-pointer hover:inset-shadow-md hover:bg-red-600 active:bg-red-700">
               -
             </div>
           </button>
@@ -44,12 +49,14 @@ export default function InputBox({matrix, matrixName, setMatrixFunction}: InputP
           <button onClick={()=> {
             setMatrixFunction(AddColumn(matrix));
             }}>
-            <div className="bg-green-500 px-4 rounded-xl">
+            <div className="bg-green-500 px-4 rounded-xl font-bold hover:cursor-pointer hover:inset-shadow-md hover:bg-green-600 active:bg-green-700">
               +
             </div>
           </button>
         </div>
       </div>
+
+      {/* The input container */}
       <div className="flex max-w-xl h-fit justify-self-center items-stretch py-1">
         <Brace matrixName={matrixName} side="left"/>
         <div id="matrix" className="overflow-x-auto py-2 justify-center">

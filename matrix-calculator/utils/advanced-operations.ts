@@ -66,7 +66,7 @@ export function GaussJordanElimination(matrix: Matrix): GaussJordanData {
             failed: ref_form.failed
         };
     }
-    let normalized_form = ref_form.result_matrix.slice(0);
+    let normalized_form = ref_form.result_matrix.map(row => [...row]);
     const normalRows = GetMatrixRows(normalized_form);
     const normalCols = GetMatrixColumns(normalized_form);
     const numberOfPivots = Math.min(normalRows, normalCols);
@@ -78,7 +78,7 @@ export function GaussJordanElimination(matrix: Matrix): GaussJordanData {
         }
     }
     // TODO: Step 3: Backwards elimination
-    let result = normalized_form.slice(0);
+    let result = normalized_form.map(row => [...row]);
     let multiplier = 0;
     // This will be the number of pivots
     // For every row with a pivot, starting at the last pivot working backwards
