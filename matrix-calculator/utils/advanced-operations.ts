@@ -3,6 +3,8 @@ import { CreateBlockMatrix, CreateIdentity, GetMatrixColumns, GetMatrixRows, Mat
 type GaussElimData = {
     result_matrix: Matrix,
     failed: boolean,
+    elimination_steps?: Matrix[],
+
 }
 
 type GaussJordanData = {
@@ -21,7 +23,7 @@ type GaussJordanData = {
  */
 export function GaussianElimination(matrix: Matrix): GaussElimData {
     let result = matrix.map(row => [...row]); // This is done so React will trigger a re-render because this is technically a new variable.
-    let elimination_matrices: Matrix[] = [];
+    let elimination_steps: Matrix[] = [];
     const columns = GetMatrixColumns(result);
     const rows = GetMatrixRows(result);
     
@@ -46,15 +48,18 @@ export function GaussianElimination(matrix: Matrix): GaussElimData {
         }
         // Multiplier = entry to eliminate in row i / pivot in row n
         // Creates an identity matrix with size = # of rows in our matrix (will be used as an elimination matrix)
-        elimination_matrices.push(CreateIdentity(rows));
+        let elimination_matrix = CreateIdentity(rows);
         for (let i = pivot + 1; i < rows; i++) { // Gather all multipliers below the pivot to place in elimination matrix
             //In the pivot-th elimination matrix, place the multiplier in the [i, pivot] spot
-            elimination_matrices[pivot][i][pivot] = -(result[i][pivot] / result[pivot][pivot]);
+            elimination_matrix[i][pivot] = -(result[i][pivot] / result[pivot][pivot]);
         }
-        result = MultiplyMatrices(elimination_matrices[pivot], result); // Multiply our current matrix by the elimination matrix
+        console.log(elimination_matrix);
+        result = MultiplyMatrices(elimination_matrix, result); // Multiply our current matrix by the elimination matrix
+        elimination_steps.push(result.map(row => [...row]));
+        console.log(elimination_steps);
     }
 
-    return {result_matrix: result, failed: false};
+    return {result_matrix: result, failed: false, elimination_steps: elimination_steps};
 }
 
 export function GaussJordanElimination(matrix: Matrix): GaussJordanData {
@@ -77,7 +82,7 @@ export function GaussJordanElimination(matrix: Matrix): GaussJordanData {
             normalized_form[i][j] = normalized_form[i][j] / pivot; // Divide each cell by the pivot to normalize (1's on the diagonal)
         }
     }
-    // TODO: Step 3: Backwards elimination
+    // Step 3: Backwards elimination
     let result = normalized_form.map(row => [...row]);
     let multiplier = 0;
     // This will be the number of pivots
@@ -122,4 +127,8 @@ export function InvertMatrix(matrix: Matrix): Matrix {
         }
     }
     return inverted;
+}
+
+export function LUFactorization() {
+    
 }

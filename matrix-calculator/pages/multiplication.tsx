@@ -50,7 +50,7 @@ export default function Multiplication() {
         {!multPossible && <p className="text-red-500">The number of columns in A must match the number of rows in B!</p>}
 
         {/*The output matrix*/}
-        <OutputBox rows={GetMatrixRows(output)} columns={GetMatrixColumns(output)} output={output} matrixName="output"/>
+        <OutputBox rows={GetMatrixRows(output)} columns={GetMatrixColumns(output)} output={output} matrixName="output" showName={false}/>
       </div>
     </div>
   )

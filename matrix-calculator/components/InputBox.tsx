@@ -63,7 +63,7 @@ export default function InputBox({matrix, matrixName, setMatrixFunction}: InputP
           {matrix && matrix.map((row, rowIndex)=>(
             <div key={`${matrixName}-${rowIndex}`} className="flex gap-2">
               {row.map((cell, cellIndex)=>(
-                <input key={`${matrixName}-${cellIndex}`} type={"number"} value={cell} onChange={(e)=>{
+                <input title={`${matrixName}[${rowIndex + 1}, ${cellIndex + 1}]`} key={`${matrixName}-${cellIndex}`} type={"number"} value={cell} onChange={(e)=>{
                   let temp = matrix.map(r => [...r]);
                   temp[rowIndex][cellIndex]=e.target.valueAsNumber;
                   setMatrixFunction(temp);
@@ -75,6 +75,15 @@ export default function InputBox({matrix, matrixName, setMatrixFunction}: InputP
           ))}
         </div>
         <Brace matrixName={matrixName} side="right" />
+      </div>
+
+      {/* The Clear button */}
+      <div className="">
+        <button>
+          <div className="bg-neutral-500">
+            <h3>Clear</h3>
+          </div>
+        </button>
       </div>
     </div>)
 }
