@@ -3,11 +3,12 @@ import { SetStateAction } from "react";
 import Brace from "./Brace";
 
 type InputProps = {
+    variant: "default" | "square",
     matrix: Matrix,
     matrixName: string,
     setMatrixFunction: (value: SetStateAction<Matrix>) => void,
 }
-export default function InputBox({matrix, matrixName, setMatrixFunction}: InputProps) {
+export default function InputBox({variant, matrix, matrixName, setMatrixFunction}: InputProps) {
 
     return (
     <div className="p-2 gap-y-1.5 flex-1">
@@ -15,6 +16,7 @@ export default function InputBox({matrix, matrixName, setMatrixFunction}: InputP
       <p className="text-4xl font-extrabold font-serif text-center">{matrixName}</p>
 
       {/* Buttons to set rows and columns */}
+      {variant == "default" &&
       <div id={`Buttons-${matrixName}`} className="flex gap-2 justify-center">
         {/* Row Buttons */}
         <div id={`Rows-${matrixName}`} className="flex gap-1">
@@ -55,20 +57,46 @@ export default function InputBox({matrix, matrixName, setMatrixFunction}: InputP
           </button>
         </div>
       </div>
-
+      }
+      {variant == "square" &&
+      <div id={`Buttons-${matrixName}`} className="flex gap-2 justify-center">
+        <div id={`Size-${matrixName}`} className="flex gap-1">
+          <p>Size:</p>
+          <button onClick={()=> {
+            let a = RemoveRow(matrix);
+            a = RemoveColumn(a);
+            setMatrixFunction(a);
+          }}>
+            <div className="bg-red-500 px-4 rounded-xl font-bold hover:cursor-pointer hover:inset-shadow-md hover:bg-red-600 active:bg-red-700">
+              -
+            </div>
+          </button>
+          {GetMatrixRows(matrix)}
+          <button onClick={()=> {
+            let a = AddRow(matrix);
+            a = AddColumn(a);
+            setMatrixFunction(a);
+            }}>
+            <div className="bg-green-500 px-4 rounded-xl font-bold hover:cursor-pointer hover:inset-shadow-md hover:bg-green-600 active:bg-green-700">
+              +
+            </div>
+          </button>
+        </div>
+      </div>
+      }
       {/* The input container */}
       <div className="flex max-w-xl h-fit justify-self-center items-stretch py-1">
         <Brace matrixName={matrixName} side="left"/>
         <div id="matrix" className="overflow-x-auto py-2 justify-center">
           {matrix && matrix.map((row, rowIndex)=>(
-            <div key={`${matrixName}-${rowIndex}`} className="flex gap-2">
+            <div key={`${matrixName}-${rowIndex}`} className="flex gap-2 my-1">
               {row.map((cell, cellIndex)=>(
                 <input title={`${matrixName}[${rowIndex + 1}, ${cellIndex + 1}]`} key={`${matrixName}-${cellIndex}`} type={"number"} value={cell} onChange={(e)=>{
                   let temp = matrix.map(r => [...r]);
                   temp[rowIndex][cellIndex]=e.target.valueAsNumber;
                   setMatrixFunction(temp);
                 }}
-                className={`hover:shadow-inner w-[90px] rounded-xs ${rowIndex % 2 == 0 ? `bg-gray-100`: `bg-white`} text-center`}
+                className={`hover:inset-shadow-md w-[90px] rounded-xs ${rowIndex % 2 == 0 ? `bg-gray-100`: `bg-white`} text-center`}
                 />
               ))}
             </div>
@@ -78,9 +106,13 @@ export default function InputBox({matrix, matrixName, setMatrixFunction}: InputP
       </div>
 
       {/* The Clear button */}
-      <div className="">
-        <button>
-          <div className="bg-neutral-500">
+      <div className="justify-self-center">
+        <button onClick={()=> {
+          if (confirm(`Are you sure you want to clear Matrix ${matrixName}?`)) {
+            setMatrixFunction(Array(GetMatrixRows(matrix)).fill(null).map(()=> Array(GetMatrixColumns(matrix)).fill(0)));
+          }
+        }}>
+          <div className="rounded-xl px-2 p-1 bg-red-600 text-white">
             <h3>Clear</h3>
           </div>
         </button>

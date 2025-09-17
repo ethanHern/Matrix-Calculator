@@ -14,6 +14,13 @@ type GaussJordanData = {
     failed: boolean,
 }
 
+type InverseData = {
+    block_matrix: Matrix,
+    gauss_jordan_form: Matrix,
+    result?: Matrix,
+    failed: boolean
+}
+
 /**
  * Takes in a matrix and performs Gaussian elimination, resulting in the matrix in Reduced Echelon Form (REF)
  * 
@@ -107,26 +114,36 @@ export function GaussJordanElimination(matrix: Matrix): GaussJordanData {
     }
 }
 
-export function InvertMatrix(matrix: Matrix): Matrix {
+export function InvertMatrix(matrix: Matrix): InverseData {
     // Step 1: Create a block matrix with the input matrix and an Identity Matrix [M I]
     let block = CreateBlockMatrix(matrix, CreateIdentity(GetMatrixRows(matrix)));
 
     // Step 2: Perform Gauss-Jordan Elimination on the block matrix
-    let eliminated = GaussJordanElimination(block).result;
+    let elimination = GaussJordanElimination(block);
 
     // Now, the eliminated matrix should be a block matrix with the identity on the left and the inverted matrix on the right
     // Step 3: Extract inverted matrix
-    if (!eliminated) { // Elimination failed
-        return matrix;
+    if (!elimination.result) { // Elimination failed
+        return {
+            block_matrix: block,
+            gauss_jordan_form: elimination.ref_form,
+            failed: true
+        };
     }
-    let inverted: Matrix = [];
-    let size = GetMatrixRows(eliminated); // Because we're dealing with square matrices, the number of columns in the inverted matrix is equal to the number of rows in the block matrix
+    let GJ_Form = elimination.result;
+    const size = GetMatrixRows(GJ_Form); // Because we're dealing with square matrices, the number of columns in the inverted matrix is equal to the number of rows in the block matrix
+    let inverted: Matrix = Array(size).fill(null).map(()=> Array(length).fill(0));
     for (let i = 0; i < size; i++) {
         for (let j = 0; j < size; j++) {
-            inverted[i][j] = eliminated[i][j + size];
+            inverted[i][j] = GJ_Form[i][j + size];
         }
     }
-    return inverted;
+    return {
+        block_matrix: block,
+        gauss_jordan_form: GJ_Form,
+        result: inverted,
+        failed: false
+    };
 }
 
 export function LUFactorization() {

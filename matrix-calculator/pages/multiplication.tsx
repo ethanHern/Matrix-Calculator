@@ -1,6 +1,7 @@
 import InputBox from "@/components/InputBox";
 import OutputBox from "@/components/OutputBox";
 import { GetMatrixColumns, GetMatrixRows, Matrix, MultiplyMatrices } from "@/utils/elementary-operations";
+import Head from "next/head";
 import { useState } from "react";
 
 
@@ -12,21 +13,25 @@ export default function Multiplication() {
 
   return (
     <div className="mt-2 flex-col">
+      <Head>
+        <title>Matrix Calculator- Multiplication</title>
+        
+      </Head>
       <h1 className="font-extrabold text-4xl text-center">Matrix Multiplication</h1>
       <h3 className="text-center mb-3">Multiply a matrix A by another matrix B</h3>
 
       {/*The container for the input matrices*/}
       <div className="flex px-16 min-w-screen">
         {/*Input A*/}
-        <InputBox matrix={A} matrixName={"A"} setMatrixFunction={setA}/>
+        <InputBox variant="default" matrix={A} matrixName={"A"} setMatrixFunction={setA}/>
 
         {/*The swap button*/}
-        <button className="self-start" onClick={()=>{setA(B); setB(A);}}>
-          <div className="bg-gradient-to-tl bg-gray-300 rounded-xl p-3">Swap</div>
+        <button onClick={()=>{setA(B); setB(A);}}>
+          <div className="bg-gray-300 rounded-xl p-3 hover:inset-shadow-md hover:cursor-pointer hover:bg-gray-400">Swap</div>
         </button>
 
         {/*Input B*/}
-        <InputBox matrix={B} matrixName={"B"} setMatrixFunction={setB}/>
+        <InputBox variant="default" matrix={B} matrixName={"B"} setMatrixFunction={setB}/>
       </div>
 
       {/*The container for the output*/}
@@ -41,7 +46,7 @@ export default function Multiplication() {
             setMultPossible(false);
           }
         }}>
-          <div className="bg-orange-500 p-3 rounded-xl">
+          <div className="bg-orange-500 p-3 rounded-xl hover:cursor-pointer hover:inset-shadow-md hover:bg-orange-600 active:bg-orange-700">
             Set
           </div>
         </button>
@@ -50,7 +55,7 @@ export default function Multiplication() {
         {!multPossible && <p className="text-red-500">The number of columns in A must match the number of rows in B!</p>}
 
         {/*The output matrix*/}
-        <OutputBox rows={GetMatrixRows(output)} columns={GetMatrixColumns(output)} output={output} matrixName="output" showName={false}/>
+        <OutputBox rows={GetMatrixRows(output)} columns={GetMatrixColumns(output)} output={output} matrixName="Output" showName={false}/>
       </div>
     </div>
   )

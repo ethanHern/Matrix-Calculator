@@ -46,7 +46,7 @@ export default function Elimination() {
           </h3>
 
           {/*The input matrix*/}
-          <InputBox matrix={A} matrixName="A" setMatrixFunction={setA} />
+          <InputBox variant={"default"} matrix={A} matrixName="A" setMatrixFunction={setA} />
 
           {/*The container for the output*/}
           <div className="flex flex-col items-center">
