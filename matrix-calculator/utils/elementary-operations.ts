@@ -85,7 +85,29 @@ export function MultiplyMatrices(A: Matrix, B: Matrix): Matrix {
     return c;
 }
 
+export function AddMatrices(A: Matrix, B: Matrix): Matrix {
+    const rows = GetMatrixRows(A);
+    const cols = GetMatrixColumns(A);
+    let c: Matrix = Array(rows).fill(null).map(()=> Array(cols).fill(0));
+    for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+            c[i][j] = A[i][j] + B[i][j];
+        }
+    }
+    return c;
+}
 
+export function SubtractMatrices(A: Matrix, B: Matrix): Matrix {
+    const rows = GetMatrixRows(A);
+    const cols = GetMatrixColumns(A);
+    let c: Matrix = Array(rows).fill(null).map(()=> Array(cols).fill(0));
+    for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+            c[i][j] = A[i][j] - B[i][j];
+        }
+    }
+    return c;
+}
 
 /**
  * Adds an array to the 2D array provided,

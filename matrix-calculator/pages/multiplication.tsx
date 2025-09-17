@@ -8,7 +8,7 @@ import { useState } from "react";
 export default function Multiplication() {
   const [A, setA] = useState<Matrix>([[0, 0], [0, 0]]);
   const [B, setB] = useState<Matrix>([[0, 0], [0, 0]]);
-  const [output, setOutput] = useState<Matrix>([[0, 0], [0, 0]]);
+  const [output, setOutput] = useState<Matrix>();
   const [multPossible, setMultPossible] = useState<boolean>(true);
 
   return (
@@ -55,7 +55,7 @@ export default function Multiplication() {
         {!multPossible && <p className="text-red-500">The number of columns in A must match the number of rows in B!</p>}
 
         {/*The output matrix*/}
-        <OutputBox rows={GetMatrixRows(output)} columns={GetMatrixColumns(output)} output={output} matrixName="Output" showName={false}/>
+        {output && <OutputBox rows={GetMatrixRows(output)} columns={GetMatrixColumns(output)} output={output} matrixName="Output" showName={false}/>}
       </div>
     </div>
   )
