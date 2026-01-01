@@ -40,7 +40,7 @@ export function GaussianElimination(matrix: Matrix): GaussElimData {
             noZeroPivots = false;
             for (let i = pivot + 1; i < rows; i++) { // Search the rows below the current pivot to find a suitable swap
                 if (result[i][pivot] != 0) {
-                    result = SwapRows(result, pivot, i); // Swaps the row containing the nth pivot with the ith row
+                    result = SwapRows(result, pivot, i) as Matrix; // Swaps the row containing the nth pivot with the ith row
                     noZeroPivots = true;
                     break;
                 }

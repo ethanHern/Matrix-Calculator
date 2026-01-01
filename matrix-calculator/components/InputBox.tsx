@@ -1,6 +1,7 @@
 import { AddColumn, AddRow, GetMatrixColumns, GetMatrixRows, Matrix, RemoveColumn, RemoveRow } from "@/utils/elementary-operations";
 import { SetStateAction } from "react";
 import Brace from "./Brace";
+import { ReadCSV } from "@/utils/csv_ops";
 
 type InputProps = {
     variant: "default" | "square",
@@ -106,7 +107,24 @@ export default function InputBox({variant, matrix, matrixName, setMatrixFunction
       </div>
 
       {/* The Clear button */}
-      <div className="justify-self-center">
+      <div className="flex-row justify-self-center gap-2">
+        <input id={`${matrixName}-input`} type='file' accept=".csv" hidden={true} multiple={false} onChange={(event)=>{
+          const file = event.target.files;
+          if (file) {
+            let data = file[0];
+            ReadCSV(data, setMatrixFunction);
+          }
+        }}/>
+        <button onClick={()=>{
+          const inputFile = document.getElementById(`${matrixName}-input`) as HTMLInputElement;
+          if (inputFile) {
+            inputFile.click();
+          }
+        }}>
+          <div className="rounded-xl px-2 p-1 bg-gray-800 text-white">
+            <h3>Import CSV</h3>
+          </div>
+        </button>
         <button onClick={()=> {
           if (confirm(`Are you sure you want to clear Matrix ${matrixName}?`)) {
             setMatrixFunction(Array(GetMatrixRows(matrix)).fill(null).map(()=> Array(GetMatrixColumns(matrix)).fill(0)));

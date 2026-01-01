@@ -1,12 +1,12 @@
 /*A custom type that represents a 2D array*/
 export type Matrix = number[][];
-
+export type StringMatrix = string[][];
 /**
 Takes a Matrix-type variable and returns the number of rows it contains
 @param matrix The matrix whose rows will be counted
 @returns The number of rows the matrix contains
  **/
-export function GetMatrixRows(matrix: Matrix): number {
+export function GetMatrixRows(matrix: Matrix | StringMatrix): number {
     return (matrix.length);
 }
 
@@ -15,7 +15,7 @@ export function GetMatrixRows(matrix: Matrix): number {
  * @param matrix The matrix whose columns will be counted
  * @returns The number of columns the matrix contains
  **/
-export function GetMatrixColumns(matrix: Matrix): number {
+export function GetMatrixColumns(matrix: Matrix | StringMatrix): number {
     return (matrix[0].length);
 }
 
@@ -27,7 +27,7 @@ export function GetMatrixColumns(matrix: Matrix): number {
  * 
  * @returns A clone of the provided matrix, now with swapped rows
 **/
-export function SwapRows(matrix: Matrix, rowA: number, rowB: number): Matrix {
+export function SwapRows(matrix: Matrix | StringMatrix, rowA: number, rowB: number): Matrix | StringMatrix {
     let temp = matrix.slice(0); // This is done so that a React triggers a re-render, since technically it is a new value and not a modification of the original value
     temp[rowA] = matrix[rowB];
     temp[rowB] = matrix[rowA];
@@ -168,4 +168,18 @@ export function RemoveColumn(matrix: Matrix): Matrix {
         temp[i] = matrix[i].slice(0, -1);
     }
     return temp;
+}
+
+export function StringToNum(matrix: StringMatrix): Matrix {
+    const rows = GetMatrixRows(matrix);
+    const cols = GetMatrixColumns(matrix);
+    let outputMatrix: Matrix = Array(rows).fill(null).map(()=> Array(cols).fill(0));
+    for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+            console.log(matrix[i][j])
+            let convertedValue = Number(matrix[i][j].replace('/\r/g', ''));
+            outputMatrix[i][j] = convertedValue;
+        }
+    }
+    return outputMatrix;
 }
